@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Chart, StockChart, ChartModule, HIGHCHARTS_MODULES } from 'angular-highcharts';
-import more from 'highcharts/highcharts-more.src';
-import exporting from 'highcharts/modules/exporting.src';
+import more from 'highcharts/highcharts-more';
+import exporting from 'highcharts/modules/exporting';
 
 @Component({
   selector: 'app-root',
