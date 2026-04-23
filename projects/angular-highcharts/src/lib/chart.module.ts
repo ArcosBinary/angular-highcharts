@@ -11,8 +11,8 @@ import { ChartDirective } from './chart.directive';
 import { ChartService, HIGHCHARTS_MODULES } from './chart.service';
 
 @NgModule({
+  imports: [ChartDirective],
   exports: [ChartDirective],
-  declarations: [ChartDirective],
   providers: [
     { provide: HIGHCHARTS_MODULES, useValue: [] },
     ChartService

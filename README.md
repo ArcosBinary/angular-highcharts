@@ -2,27 +2,19 @@
 
 [![NPM version](https://img.shields.io/npm/v/angular-highcharts.svg)](https://npmjs.org/package/up2date-angular-highcharts)
 [![NPM downloads](https://img.shields.io/npm/dt/angular-highcharts.svg)](https://npmjs.org/package/up2date-angular-highcharts)
-![](https://github.com/cebor/angular-highcharts/workflows/Node.js%20Package/badge.svg)
 
-This is a directive for an easy usage of [Highcharts](https://www.highcharts.com/) with angular.
+This is a directive for an easy usage of [Highcharts](https://www.highcharts.com/) with Angular.
 
 ## Requirements
 
 ```json
 {
-  "angular": "^18.2.9",
+  "angular": "^21.0.0",
   "highcharts": "^11.4.8"
 }
 ```
 
 ## Installation
-
-### yarn
-
-```bash
-# install angular-highcharts and highcharts
-yarn add angular-highcharts highcharts
-```
 
 ### npm
 
@@ -31,55 +23,83 @@ yarn add angular-highcharts highcharts
 npm i --save angular-highcharts highcharts
 ```
 
+### yarn
+
+```bash
+# install angular-highcharts and highcharts
+yarn add angular-highcharts highcharts
+```
+
 ## Usage Example
 
-```typescript
-// app.module.ts
-import { ChartModule } from "angular-highcharts";
+### Standalone (Recommended)
 
-@NgModule({
-  imports: [
-    ChartModule, // add ChartModule to your imports
-  ],
-})
-export class AppModule {}
-```
+Since version 21, `ChartDirective` is **standalone**. You can import it directly into your components.
 
 ```typescript
 // chart.component.ts
-import { Chart } from "angular-highcharts";
+import { Component } from '@angular/core';
+import { Chart, ChartModule } from 'angular-highcharts';
 
 @Component({
+  selector: 'app-chart',
+  standalone: true,
+  imports: [ChartModule], // or just [ChartDirective]
   template: `
     <button (click)="add()">Add Point!</button>
     <div [chart]="chart"></div>
-  `,
+  `
 })
 export class ChartComponent {
   chart = new Chart({
-    chart: {
-      type: "line",
-    },
-    title: {
-      text: "Linechart",
-    },
-    credits: {
-      enabled: false,
-    },
-    series: [
-      {
-        name: "Line 1",
-        data: [1, 2, 3],
-      },
-    ],
+    chart: { type: 'line' },
+    title: { text: 'Linechart' },
+    series: [{
+      name: 'Line 1',
+      data: [1, 2, 3]
+    }]
   });
 
-  // add point to chart serie
   add() {
     this.chart.addPoint(Math.floor(Math.random() * 10));
   }
 }
 ```
+
+### Zoneless Support
+
+This library fully supports **Angular Zoneless** mode. In your `main.ts`, you can bootstrap your application without `zone.js`:
+
+```typescript
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideZonelessChangeDetection } from '@angular/core';
+import { AppComponent } from './app/app.component';
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZonelessChangeDetection()
+  ]
+});
+```
+
+## Using Highcharts modules
+
+To use Highcharts modules, provide them using the `HIGHCHARTS_MODULES` token.
+
+```typescript
+// main.ts or app.config.ts
+import { HIGHCHARTS_MODULES } from 'angular-highcharts';
+import more from 'highcharts/highcharts-more.src';
+import exporting from 'highcharts/modules/exporting.src';
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    { provide: HIGHCHARTS_MODULES, useFactory: () => [more, exporting] }
+  ]
+});
+```
+
+**Note:** Don't forget to use the modules with the `.src` suffix for better compatibility with modern bundlers.
 
 ## API Docs
 
@@ -186,30 +206,6 @@ ref$;
 ```
 
 Observable that emits a Highmaps.Chart
-
-## Using Highcharts modules
-
-To use Highcharts modules you have to import them and provide them in a factory (required for aot).
-You can find the list of available modules in the highcharts folder `ls -la node_modules/highcharts/modules`.
-
-**Hint:** Highcharts-more is a exception, you find this module in the root folder.
-Don't forget to use the modules with the `.src` suffix, minimized highcharts modules are not importable.
-
-### Example
-
-```typescript
-// app.module.ts
-import { ChartModule, HIGHCHARTS_MODULES } from "angular-highcharts";
-import * as more from "highcharts/highcharts-more.src";
-import * as exporting from "highcharts/modules/exporting.src";
-
-@NgModule({
-  providers: [
-    { provide: HIGHCHARTS_MODULES, useFactory: () => [more, exporting] }, // add as factory to your providers
-  ],
-})
-export class AppModule {}
-```
 
 ## Troubleshooting
 

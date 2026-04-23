@@ -6,25 +6,29 @@
  * found in the LICENSE file at
  * https://github.com/cebor/angular-highcharts/blob/master/LICENSE
  */
-import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Directive, ElementRef, OnDestroy, OnInit, effect, inject, input } from '@angular/core';
 import { Chart } from './chart';
 import { MapChart } from './mapchart';
 import { StockChart } from './stockchart';
 import { HighchartsGantt } from './highcharts-gantt';
 
 @Directive({
-  selector: '[chart]'
+  selector: '[chart]',
+  standalone: true
 })
-export class ChartDirective implements OnInit, OnDestroy, OnChanges {
-  @Input() chart: Chart | StockChart | MapChart | HighchartsGantt | undefined;
+export class ChartDirective implements OnInit, OnDestroy {
+  chart = input<Chart | StockChart | MapChart | HighchartsGantt | undefined>();
 
-  constructor(private el: ElementRef) {}
+  private el = inject(ElementRef);
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (!changes['chart']?.isFirstChange()) {
-      this.destroy();
-      this.init();
-    }
+  constructor() {
+    effect(() => {
+      const chartValue = this.chart();
+      if (chartValue) {
+        this.destroy();
+        this.init();
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -36,16 +40,18 @@ export class ChartDirective implements OnInit, OnDestroy, OnChanges {
   }
 
   private init() {
-    if (this.chart instanceof Chart || this.chart instanceof StockChart || this.chart instanceof MapChart
-      || this.chart instanceof HighchartsGantt) {
-      this.chart.init(this.el);
+    const chartValue = this.chart();
+    if (chartValue instanceof Chart || chartValue instanceof StockChart || chartValue instanceof MapChart
+      || chartValue instanceof HighchartsGantt) {
+      chartValue.init(this.el);
     }
   }
 
   private destroy() {
-    if (this.chart instanceof Chart || this.chart instanceof StockChart || this.chart instanceof MapChart
-      || this.chart instanceof HighchartsGantt) {
-      this.chart.destroy();
+    const chartValue = this.chart();
+    if (chartValue instanceof Chart || chartValue instanceof StockChart || chartValue instanceof MapChart
+      || chartValue instanceof HighchartsGantt) {
+      chartValue.destroy();
     }
   }
 }

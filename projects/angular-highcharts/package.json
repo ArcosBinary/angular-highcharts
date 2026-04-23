@@ -1,6 +1,6 @@
 {
   "name": "up2date-angular-highcharts",
-  "version": "18.0.0",
+  "version": "21.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/ArcosBinary/angular-highcharts.git"
@@ -13,9 +13,10 @@
     "component"
   ],
   "license": "MIT",
+  "type": "module",
   "peerDependencies": {
-    "@angular/common": ">=18.0.0",
-    "@angular/core": ">=18.0.0"
+    "@angular/common": ">=18.0.0 || ^21.0.0",
+    "@angular/core": ">=18.0.0 || ^21.0.0"
   },
   "dependencies": {
     "tslib": "^2.8.0"

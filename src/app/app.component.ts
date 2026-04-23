@@ -1,10 +1,15 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Chart, StockChart } from 'angular-highcharts';
+import { Chart, StockChart, ChartModule, HIGHCHARTS_MODULES } from 'angular-highcharts';
+import more from 'highcharts/highcharts-more.src';
+import exporting from 'highcharts/modules/exporting.src';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  standalone: true,
+  imports: [ChartModule],
+  providers: [{ provide: HIGHCHARTS_MODULES, useFactory: () => [more, exporting] }]
 })
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'lib-angular-highcharts';
@@ -65,7 +70,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             [1484663400000, 120],
             [1484749800000, 119.99],
             [1484836200000, 119.78],
-            [1484922600000, 120]
+            [1484922260000, 120]
           ],
           type: 'spline',
           tooltip: {
