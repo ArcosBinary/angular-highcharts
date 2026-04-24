@@ -140,7 +140,7 @@
           "options": {
             "main": "projects/angular-highcharts/src/test.ts",
             "tsConfig": "projects/angular-highcharts/tsconfig.spec.json",
-            "karmaConfig": "projects/angular-highcharts/karma.conf.js"
+            "karmaConfig": "projects/angular-highcharts/karma.conf.cjs"
           }
         },
         "lint": {

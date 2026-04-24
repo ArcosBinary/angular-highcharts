@@ -20,7 +20,13 @@ export class ChartService {
 
   initModules() {
     this.chartModules.forEach(chartModule => {
-      [Highcharts, Highstock, Highmaps, HighchartsGnatt].forEach(chartModule);
+      const init = typeof chartModule === 'function' ? chartModule : chartModule.default;
+
+      if (typeof init === 'function') {
+        [Highcharts, Highstock, Highmaps, HighchartsGnatt].forEach(hc => init(hc));
+      } else {
+        console.warn('angular-highcharts: Highcharts module format not recognized. Expected function or ESM with default export.', chartModule);
+      }
     });
   }
 }
